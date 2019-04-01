@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.productrecommendation.productrecommendation">
+
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@mipmap/eye_icon"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/eye_icon"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity android:name=".HomeActivity">
+        </activity>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="History"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".FavoriteActivity" />
+        <activity android:name=".HelpActivity" />
+        <activity android:name=".ViewImageActivity" />
+        <activity android:name=".ResultActivity"></activity>
+    </application>
+
+</manifest>

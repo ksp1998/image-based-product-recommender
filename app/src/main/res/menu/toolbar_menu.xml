@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/delete"
+        android:title="Delete"
+        android:icon="@drawable/ic_delete"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/addRemoveFavorite"
+        android:title="Add to Favorites"
+        android:icon="@drawable/ic_add_favorite"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+
+</menu>

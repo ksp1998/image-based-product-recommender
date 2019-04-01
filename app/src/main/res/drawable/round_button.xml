@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="2px"
+        android:right="2px"
+        android:left="2px"
+        android:top="2px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#eee" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="4px"
+        android:right="4px"
+        android:left="4px"
+        android:top="4px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#ddd" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="6px"
+        android:right="6px"
+        android:left="6px"
+        android:top="6px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#ccc" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="8px"
+        android:right="8px"
+        android:left="8px"
+        android:top="8px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#bbb" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="10px"
+        android:right="10px"
+        android:left="10px"
+        android:top="10px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#aaa" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="12px"
+        android:right="12px"
+        android:left="12px"
+        android:top="12px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#888" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="14px"
+        android:right="14px"
+        android:left="14px"
+        android:top="14px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#666" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+    <item android:bottom="16px"
+        android:right="16px"
+        android:left="16px"
+        android:top="16px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#444" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+</layer-list>
