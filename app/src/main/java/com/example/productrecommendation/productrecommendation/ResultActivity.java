@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -27,37 +28,49 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.example.productrecommendation.productrecommendation.database.DatabaseHelper;
 import com.example.productrecommendation.productrecommendation.detect.Classifier;
 import com.example.productrecommendation.productrecommendation.detect.TensorFlowImageClassifier;
 
 public class ResultActivity extends AppCompatActivity {
 
-    private static final String MODEL_PATH = "mobilenet_quant_v1_224.tflite";
+    // Declaration of variables for detecting object from model
+
+    private static final String MODEL_PATH = "object_detection_quant_model.tflite";
     private static final boolean QUANT = true;
-    private static final String LABEL_PATH = "label.txt";
+    private static final String LABEL_PATH = "object_labels.txt";
     private static final int INPUT_SIZE = 224;
+
+    // Declaration of View objects
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nav_bar;
-    private DatabaseHelper dh;
+    private ProgressBar progressBar;
+    private ImageView image;
+    private Bitmap bitmap;
+
+    // Declaration of objects
+
+    private Bundle extras;
+    private Class contextClass;
+    private LinearLayout resultPanel;
+    private String url[];
     private int previousActivity;
     private int id;
-    private Bitmap bitmap;
-    private Class contextClass;
-    private Bundle extras;
-    private ImageView image;
-    private String url[];
-    private LinearLayout resultPanel;
-    private ProgressBar progressBar;
+    private boolean resultFound = false;
+    private LinearLayout.LayoutParams params;
 
+
+    // Creating database object for accessing database class and methods
+    private DatabaseHelper dh;
+
+    // Creating objects for detecting object from model
     private Classifier classifier;
     private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
         super.onCreate(savedInstanceState);
 
@@ -67,26 +80,38 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         getSupportActionBar().setTitle("Result");
 
+        //calling initial method
         init();
     }
+
+    // Initializing objects and calling necessary methods
 
     public void init() {
         drawerLayout = findViewById(R.id.drawer);
         nav_bar = findViewById(R.id.nav);
         image = findViewById(R.id.image);
-        dh = new DatabaseHelper(this);
         resultPanel = findViewById(R.id.resultPanel);
         progressBar = findViewById(R.id.progressBar);
+
+        dh = new DatabaseHelper(this);
 
         extras = getIntent().getExtras();
         id = extras.getInt("id");
         previousActivity = extras.getInt("previousActivity");
-        Log.i("previousactivity", ""+previousActivity);
+        // Log.i("previousactivity", ""+previousActivity);
+
+        params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(100,8,100,8);
 
         initTensorFlowAndLoadModel();
         setupToolbar();
         getResultData();
     }
+
+    // Initializing and Loading Tensorflow Model
 
     private void initTensorFlowAndLoadModel() {
         executor.execute(new Runnable() {
@@ -159,22 +184,28 @@ public class ResultActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Method for loading input image into ImageView from database and fetching result
+
     public void getResultData() {
 
         if (previousActivity == 2) {
             contextClass = FavoriteActivity.class;
             bitmap = dh.getResourceImage(id, "FAVORITES");
-            image.setImageBitmap(bitmap);
-        } else {
+        }
+        else {
             contextClass = HistoryActivity.class;
             bitmap = dh.getResourceImage(id, "HISTORY");
-            image.setImageBitmap(bitmap);
         }
+        image.setImageBitmap(bitmap);
+
+        // Loading result with progress bar
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                    onImage();
-                    progressBar.setVisibility(View.GONE);
+
+                // Calling method for fetching result
+                onImage();
+                progressBar.setVisibility(View.GONE);
             }
         },1000);
     }
@@ -186,7 +217,10 @@ public class ResultActivity extends AppCompatActivity {
 
         url = new String[3];
 
+        // Creating views if result found
+
         if(results.isEmpty() != true){
+
             for(int i = 0; i < results.size(); i++){
 
                 String item = results.get(i).toString();
@@ -201,6 +235,7 @@ public class ResultActivity extends AppCompatActivity {
                             name += ch;
                     }
                 }
+
                 String accuracy = "";
                 for(int c = item.length()-7; c < item.length(); c++) {
                     char ch = item.charAt(c);
@@ -209,68 +244,84 @@ public class ResultActivity extends AppCompatActivity {
                     }
                 }
 
-                LinearLayout resultView = new LinearLayout(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(100,8,100,8);
-                resultView.setLayoutParams(params);
-                resultView.setOrientation(LinearLayout.VERTICAL);
-                //resultView.setBackgroundColor(Color.rgb(238,238,238));
-                resultView.setBackgroundResource(R.drawable.result_view_style);
-                resultView.setPadding(8,8,8,8);
-                resultPanel.addView(resultView);
+                if(name.trim().length() != 0){
 
-                TextView productName = new TextView(this);
-                productName.setTextSize(18.0f);
-                productName.setTextColor(Color.BLACK);
-                productName.setPadding(0,5,0,5);
-                productName.setText(i+1 + ") Product : " + name.trim());
-                resultView.addView(productName);
+                    resultFound = true;
 
-                TextView productAccuracy = new TextView(this);
-                productAccuracy.setTextSize(17.0f);
-                if((Float.parseFloat(accuracy) < 50.0f))
-                    productAccuracy.setTextColor(Color.RED);
-                else
-                    productAccuracy.setTextColor(Color.rgb(9,107,5));
-                productAccuracy.setPadding(50,5,0,5);
-                productAccuracy.setText("Accuracy : " + accuracy + " %");
-                resultView.addView(productAccuracy);
+                    // Making Linear Layout which will hold the result data
 
-                TextView productLink = new TextView(this);
-                productLink.setTextSize(16.0f);
-                productLink.setTextColor(Color.rgb(0, 80, 255));
-                productLink.setPadding(50,5,0,5);
-                url[i] = "https://www.flipkart.com/search?q=" + name.trim().replace(" ", "-");
-                productLink.setText(url[i].toLowerCase());
-                resultView.addView(productLink);
+                    LinearLayout resultView = new LinearLayout(this);
+                    resultView.setLayoutParams(params);
+                    resultView.setOrientation(LinearLayout.VERTICAL);
+                    resultView.setBackgroundResource(R.drawable.result_view_style);
+                    resultView.setPadding(8,8,8,8);
+                    resultPanel.addView(resultView);
 
-                final int res = i;
-                productLink.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        if(res == 0)
-                            intent.setData(Uri.parse(url[0]));
-                        else if(res == 1)
-                            intent.setData(Uri.parse(url[1]));
-                        else
-                            intent.setData(Uri.parse(url[2]));
-                        startActivity(intent);
-                    }
-                });
+                    // TextView for Product Name
+
+                    TextView productName = new TextView(this);
+                    productName.setTextSize(18.0f);
+                    productName.setTextColor(Color.BLACK);
+                    productName.setPadding(0,5,0,5);
+                    productName.setText("Product : " + name.trim());
+                    resultView.addView(productName);
+
+                    // TextView for Product Accuracy
+
+                    TextView productAccuracy = new TextView(this);
+                    productAccuracy.setTextSize(17.0f);
+                    if((Float.parseFloat(accuracy) < 50.0f))
+                        productAccuracy.setTextColor(Color.RED);
+                    else
+                        productAccuracy.setTextColor(Color.rgb(9,107,5));
+                    productAccuracy.setPadding(50,5,0,5);
+                    productAccuracy.setText("Accuracy : " + accuracy + " %");
+                    resultView.addView(productAccuracy);
+
+                    // TextView for Product Link
+
+                    TextView productLink = new TextView(this);
+                    productLink.setTextSize(16.0f);
+                    productLink.setTextColor(Color.rgb(0, 80, 255));
+                    productLink.setPadding(50,5,0,5);
+                    url[i] = "https://www.flipkart.com/search?q=" + name.trim().replace(" ", "-");
+                    productLink.setText(url[i].toLowerCase());
+                    resultView.addView(productLink);
+
+                    final int res = i;
+                    productLink.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            if(res == 0)
+                                intent.setData(Uri.parse(url[0]));
+                            else if(res == 1)
+                                intent.setData(Uri.parse(url[1]));
+                            else
+                                intent.setData(Uri.parse(url[2]));
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
-            Toast.makeText(this, "Click on the link to find product", Toast.LENGTH_SHORT).show();
+            if(resultFound)
+                Toast.makeText(this, "Click on the link to find product", Toast.LENGTH_SHORT).show();
         }
-        else{
+
+        // Making TextView with appropriate message if product not found
+        if(!resultFound){
             TextView errorMsg = new TextView(this);
             errorMsg.setTextSize(20.0f);
             errorMsg.setTextColor(Color.RED);
-            errorMsg.setPadding(0,5,0,5);
-            errorMsg.setText("No product Found!");
+            errorMsg.setLayoutParams(params);
+            errorMsg.setGravity(Gravity.CENTER);
+            errorMsg.setPadding(32,32,32,32);
+            errorMsg.setText("No product found!");
             resultPanel.addView(errorMsg);
         }
-
     }
+
+    // Going back to previous activity when back is pressed
 
     @Override
     public void onBackPressed() {

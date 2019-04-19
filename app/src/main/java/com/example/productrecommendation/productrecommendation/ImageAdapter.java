@@ -10,9 +10,13 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.example.productrecommendation.productrecommendation.database.DatabaseHelper;
+
 import java.util.ArrayList;
 
 public class ImageAdapter extends BaseAdapter {
+
+    // Declaration of objects
 
     Context context;
     int width;
@@ -21,6 +25,9 @@ public class ImageAdapter extends BaseAdapter {
     public Bitmap[] images = null;
 
     ArrayList<Bitmap> bitmaps = null;
+
+
+    // Getting History images or Favorites images from database
 
     public void getImages() {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -33,6 +40,9 @@ public class ImageAdapter extends BaseAdapter {
         images = new Bitmap[bitmaps.size()];
         images = bitmaps.toArray(images);
     }
+
+
+    // Adapter Constructor for initializing objects
 
     public ImageAdapter(Context c, int w, int h) {
         context = c;
@@ -61,10 +71,9 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ImageView image = new ImageView(context);
-        image.setImageBitmap(images[position]);
         image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         image.setLayoutParams(new GridView.LayoutParams(width, height));
-        //image.setTransitionName("imageTransition");
+        image.setImageBitmap(images[position]);
         return image;
     }
 }

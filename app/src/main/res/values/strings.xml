@@ -3,8 +3,8 @@
     <string name="search_by_image">Search by Image</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="history_string">History is Empty</string>
-    <string name="favorite_string">Favorites Not Added</string>
+    <string name="history_string">History is empty</string>
+    <string name="favorite_string">Favorites not added</string>
     <string name="help_string">
         Steps to search by image...
     </string>
@@ -18,7 +18,7 @@
         3. Your selected image will be stored in History so that you can re-search later.
     </string>
     <string name="step4">
-        4. If you want to add a particullar image to favoraite then you can add that image from the History wher you can see the heart icon for adding that image to Favorites.
+        4. If you want to add a particular image to favorite then you can add that image from the History where you can see the heart icon for adding that image to Favorites.
     </string>
     <string name="thank">
         Thank You For using Our App!!!

@@ -18,24 +18,34 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.productrecommendation.productrecommendation.database.DatabaseHelper;
 
 import java.util.ArrayList;
 
 public class FavoriteActivity extends AppCompatActivity {
 
+    // Declaration of View objects
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nav_bar;
+    private GridView gridView;
+    private TextView text;
+
+
+    // Declaration of objects
+
     private int width, height;
     private  int pos;
     private ArrayList<Bitmap> bitmaps;
+
+    // Creating database object for accessing database class and methods
     private DatabaseHelper dh;
-    private GridView gridView;
-    private TextView text;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +57,11 @@ public class FavoriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_favorite);
         getSupportActionBar().setTitle("Favorites");
 
+        //calling initial method
         init();
     }
 
+    // Initializing objects and calling necessary methods
 
     public void init() {
         drawerLayout = findViewById(R.id.drawer);
@@ -125,7 +137,10 @@ public class FavoriteActivity extends AppCompatActivity {
 
     public void addFavoriteData() {
 
+        // Getting images from ImageAdapter Class
         gridView.setAdapter(new ImageAdapter(this, width, height));
+
+        // Setting onClickListener() method for viewing image bigger
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -137,6 +152,7 @@ public class FavoriteActivity extends AppCompatActivity {
             }
         });
 
+        // Listener for deleting single image
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -149,35 +165,10 @@ public class FavoriteActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
 
-                        switch(item.getItemId()){
+                        switch(item.getItemId()) {
+
                             case R.id.delete :
-                                AlertDialog.Builder builder1 = new AlertDialog.Builder(FavoriteActivity.this);
-                                builder1.setMessage("Remove this image from favorites");
-                                builder1.setCancelable(true);
-
-                                builder1.setPositiveButton(
-                                        "Delete",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                ArrayList<Integer> ids = dh.getIds("HISTORY");
-                                                int selected_image_id = ids.get(pos);
-                                                dh.removeFavorite(selected_image_id);
-                                                Toast.makeText(FavoriteActivity.this, "Image Deleted!", Toast.LENGTH_SHORT).show();
-                                                finish();
-                                                startActivity(getIntent());
-                                            }
-                                        });
-
-                                builder1.setNegativeButton(
-                                        "Cancel",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        });
-
-                                AlertDialog alert11 = builder1.create();
-                                alert11.show();
+                                removeImage();
                                 break;
                             case R.id.cancel :
                                 break;
@@ -190,8 +181,43 @@ public class FavoriteActivity extends AppCompatActivity {
                 return true;
             }
         });
-
     }
+
+
+    // Removing image from Favorites table
+
+    public void removeImage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(FavoriteActivity.this);
+        builder.setMessage("Remove this image from favorites");
+        builder.setCancelable(true);
+
+        builder.setPositiveButton(
+                "Delete",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ArrayList<Integer> ids = dh.getIds("HISTORY");
+                        int selected_image_id = ids.get(pos);
+                        dh.removeFavorite(selected_image_id);
+                        Toast.makeText(FavoriteActivity.this, "Image Deleted!", Toast.LENGTH_SHORT).show();
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+    // Removing entire images from Favorites table
 
     public void removeFavorites(){
 

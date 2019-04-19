@@ -1,6 +1,5 @@
 package com.example.productrecommendation.productrecommendation;
 
-import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,36 +12,42 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.productrecommendation.productrecommendation.database.DatabaseHelper;
+
 import java.util.ArrayList;
 
 
 public class HistoryActivity extends AppCompatActivity {
 
+    // Declaration of View objects
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nav_bar;
-    private DatabaseHelper dh;
     private TextView text;
+    private GridView gridView;
+
+
+    // Declaration of objects
+
     private int width;
     private int height;
-    private GridView gridView;
     private int pos;
     private ArrayList<Bitmap> bitmaps;
+
+    // Creating database object for accessing database class and methods
+    private DatabaseHelper dh;
 
 
     @Override
@@ -55,8 +60,11 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
         getSupportActionBar().setTitle("History");
 
+        //calling initial method
         init();
     }
+
+    // Initializing objects and calling necessary methods
 
     public  void init() {
         drawerLayout = findViewById(R.id.drawer);
@@ -126,9 +134,14 @@ public class HistoryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     public void addHistoryData() {
 
-        gridView.setAdapter(new ImageAdapter(this, width, height));
+        // Getting images from ImageAdapter Class
+        gridView.setAdapter(new ImageAdapter(HistoryActivity.this, width, height));
+
+        // Setting onClickListener() method for viewing image bigger
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -139,6 +152,8 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
 
+
+        // Listener for deleting single image
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -153,33 +168,7 @@ public class HistoryActivity extends AppCompatActivity {
 
                         switch(item.getItemId()){
                             case R.id.delete :
-                                AlertDialog.Builder builder1 = new AlertDialog.Builder(HistoryActivity.this);
-                                builder1.setMessage("Delete this image from history");
-                                builder1.setCancelable(true);
-
-                                builder1.setPositiveButton(
-                                        "Delete",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                ArrayList<Integer> ids = dh.getIds("HISTORY");
-                                                int selected_image_id = ids.get(pos);
-                                                dh.deleteHistoryImage(selected_image_id);
-                                                Toast.makeText(HistoryActivity.this, "Image Deleted!", Toast.LENGTH_SHORT).show();
-                                                finish();
-                                                startActivity(getIntent());
-                                            }
-                                        });
-
-                                    builder1.setNegativeButton(
-                                        "Cancel",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        });
-
-                                    AlertDialog alert11 = builder1.create();
-                                    alert11.show();
+                                deleteImage();
                                 break;
                             case R.id.cancel :
                                 break;
@@ -193,6 +182,42 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    // Deleting image from History table
+
+    public void deleteImage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(HistoryActivity.this);
+        builder.setMessage("Delete this image from history");
+        builder.setCancelable(true);
+
+        builder.setPositiveButton(
+                "Delete",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ArrayList<Integer> ids = dh.getIds("HISTORY");
+                        int selected_image_id = ids.get(pos);
+                        dh.deleteHistoryImage(selected_image_id);
+                        Toast.makeText(HistoryActivity.this, "Image Deleted!", Toast.LENGTH_SHORT).show();
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+    // Removing entire images from Favorites table
 
     public void deleteHistory(){
 

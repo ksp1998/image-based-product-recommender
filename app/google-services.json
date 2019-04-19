@@ -21,10 +21,6 @@
             "package_name": "com.example.productrecommendation.productrecommendation",
             "certificate_hash": "a12aa38c8cacacc7585a249db64d38fe8753ef64"
           }
-        },
-        {
-          "client_id": "261349521088-ckkiqltneaj9uc2nelvsfq524hsb6bo0.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -33,20 +29,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "261349521088-ckkiqltneaj9uc2nelvsfq524hsb6bo0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

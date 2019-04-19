@@ -20,6 +20,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.example.productrecommendation.productrecommendation.database.DatabaseHelper;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -27,13 +30,19 @@ import java.io.InputStream;
 
 public class HomeActivity extends AppCompatActivity {
 
+    // Declaration of View objects
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nav_bar;
-    private DatabaseHelper dh;
+
+    // Declaration of objects
+
     private int id;
-    private String type;
     private boolean doubleBackToExitPressedOnce = false;
+
+    //// Creating database object for accessing database class
+    private DatabaseHelper dh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +54,12 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         getSupportActionBar().setTitle("Home");
 
+        //calling initial method
         init();
     }
+
+
+    // Initializing objects and calling necessary methods
 
     public void init(){
         drawerLayout = findViewById(R.id.drawer);
@@ -97,16 +110,19 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    // Opening Camera when button clicked
 
     public void openCamera(View v) {
-        type = "captured";
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(camera,1);
     }
 
+
+    // Opening External storage when button clicked
+
     public void uploadImage(View v) {
-        type = "uploaded";
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        gallery.setType("image/*");
         startActivityForResult(gallery, 100);
     }
 
@@ -131,36 +147,40 @@ public class HomeActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        else {
-            if (type == "captured")
-                toastMessage("Camera Closed");
-            else
-                toastMessage("Gallery Closed");
-        }
 
+        // If image found then
         if(found) {
-            try {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-                byte[] imageInByte = stream.toByteArray();
-
-                int[] res = dh.addToHistory(imageInByte);
-                int position = res[0];
-                id = res[1];
-
-                if (position != -1)
-                    toastMessage("Image stored in History");
-                else
-                    toastMessage("Something went wrong with error code " + position);
-
-                getResult();
-            }
-            catch (Exception e) {
-                Log.i("Success", "FALSE");
-                toastMessage("Oops!!! Error Ocurred " + e);
-            }
+            addToHistory(imageBitmap);
         }
     }
+
+
+    // Storing captured or uploaded image to history table in database
+
+    public void addToHistory(Bitmap imageBitmap) {
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+            byte[] imageInByte = stream.toByteArray();
+
+            id = dh.addToHistory(imageInByte);
+
+            if (id != -1) {
+                getResult();
+                //toastMessage("Image stored in History");
+            }
+            else {
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (Exception e) {
+            //Log.i("Success", "FALSE");
+            Toast.makeText(this, "Oops!!! Error Ocurred ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    // Redirect to ResultActivity when image is captured or uploaded
 
     public void getResult() {
         Intent intent = new Intent(HomeActivity.this, ResultActivity.class);
@@ -168,9 +188,8 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void toastMessage(String message){
-        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
-    }
+
+    // Override function for exiting application when double back clicked
 
     @Override
     public void onBackPressed() {

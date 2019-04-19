@@ -2,8 +2,6 @@ package com.example.productrecommendation.productrecommendation;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,13 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.WindowCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,16 +25,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.productrecommendation.productrecommendation.database.DatabaseHelper;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class ViewImageActivity extends AppCompatActivity {
 
+    // Declaration of View objects
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nav_bar;
+
+
+    // Declaration of objects
+
     private int position;
-    private DatabaseHelper dh;
     private int previousActivity;
     private Bitmap bitmap;
     private int id;
@@ -48,10 +51,12 @@ public class ViewImageActivity extends AppCompatActivity {
     private Class contextClass;
     private Button result;
 
+    // Creating database object for accessing database class and methods
+    private DatabaseHelper dh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -59,9 +64,12 @@ public class ViewImageActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_view_image);
 
+        //calling initial method
         init();
     }
 
+
+    // Initializing objects and calling necessary methods
 
     public void init() {
 
@@ -128,9 +136,14 @@ public class ViewImageActivity extends AppCompatActivity {
         });
     }
 
+
+    // This method will show selected image in bigger size
+
     public void showImage() {
 
         showImage.setImageBitmap(dh.getResourceImage(id, table));
+
+        // Setting Listener for animating screen when clicked
         showImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,6 +210,9 @@ public class ViewImageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    // This method will delete single selected image from History
+
     public void deleteHistory() {
         dh = new DatabaseHelper(this);
 
@@ -229,6 +245,8 @@ public class ViewImageActivity extends AppCompatActivity {
     }
 
 
+    // Methos for adding and removing image in/from Favorites
+
     public void addOrRemoveFavorite(MenuItem item) {
 
         String msg;
@@ -255,6 +273,9 @@ public class ViewImageActivity extends AppCompatActivity {
         }
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
+
+    // Redirect to Result activity when button is clicked
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void getResult(View v) {

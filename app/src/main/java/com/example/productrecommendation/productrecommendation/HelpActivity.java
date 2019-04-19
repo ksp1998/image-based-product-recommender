@@ -14,6 +14,8 @@ import android.view.WindowManager;
 
 public class HelpActivity extends AppCompatActivity {
 
+    // Declaration of View objects
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nav_bar;
@@ -28,8 +30,12 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help_);
         getSupportActionBar().setTitle("Help");
 
+        //calling initial method
         init();
     }
+
+
+    // Initializing objects and calling necessary methods
 
     public void init() {
         drawerLayout = findViewById(R.id.drawer);

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.productrecommendation.productrecommendation">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,23 +13,27 @@
         android:roundIcon="@mipmap/eye_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity">
+        <activity android:name=".HomeActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity
-            android:name=".HistoryActivity"
-            android:label="History"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".FavoriteActivity" />
-        <activity android:name=".HelpActivity" />
-        <activity android:name=".ViewImageActivity" />
-        <activity android:name=".ResultActivity"></activity>
+        <activity android:name=".HistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".FavoriteActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".HelpActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ViewImageActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ResultActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
