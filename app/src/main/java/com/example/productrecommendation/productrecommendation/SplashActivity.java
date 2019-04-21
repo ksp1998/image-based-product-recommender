@@ -1,5 +1,6 @@
 package com.example.productrecommendation.productrecommendation;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -24,9 +25,8 @@ public class SplashActivity extends AppCompatActivity {
 
     // Getting images from drawable to store in History
     private int[] images = new int[] {
-            R.drawable.camera, R.drawable.cup, R.drawable.eraser, R.drawable.sharpner,
-            R.drawable.keyboard, R.drawable.laptop, R.drawable.mouse, R.drawable.pc,
-            R.drawable.shoe, R.drawable.tennis_ball, R.drawable.wall_clock
+            R.drawable.camera, R.drawable.cup, R.drawable.football, R.drawable.keyboard,
+            R.drawable.mouse, R.drawable.pc, R.drawable.wall_clock
     };
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -59,17 +59,24 @@ public class SplashActivity extends AppCompatActivity {
     // This method will preload images in History from drawable
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void getHistoryImagesFromDrawable(){
-        DatabaseHelper db = new DatabaseHelper(this);
+    public void getHistoryImagesFromDrawable() {
 
-        for(int i = 0; i < images.length; i++){
-            Drawable d = getDrawable(images[i]);
+        SharedPreferences loadimages = getSharedPreferences("PREFS_NAME", 0);
+        if (!loadimages.getBoolean("FIRST_RUN", false)) {
+            // do the thing for the first time
+            DatabaseHelper db = new DatabaseHelper(this);
 
-            Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-            byte[] bitmapdata = stream.toByteArray();
-            db.addToHistory(bitmapdata);
+            for(int i = 0; i < images.length; i++){
+                Drawable d = getDrawable(images[i]);
+                Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+                byte[] bitmapdata = stream.toByteArray();
+                db.addToHistory(bitmapdata);
+            }
+            SharedPreferences.Editor editor = loadimages.edit();
+            editor.putBoolean("FIRST_RUN", true);
+            editor.commit();
         }
     }
 }

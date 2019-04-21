@@ -6,22 +6,19 @@
     <string name="history_string">History is empty</string>
     <string name="favorite_string">Favorites not added</string>
     <string name="help_string">
-        Steps to search by image...
+        Steps to search product by image...
     </string>
     <string name="step1">
         1. On the Home Page Open Camera or Choose existing image from gallery or your file storage.
     </string>
     <string name="step2">
-        2. After selecting an image click on get result to find containing object or product details.
+        2. After selecting an image you will see the containing object or product details.
     </string>
     <string name="step3">
         3. Your selected image will be stored in History so that you can re-search later.
     </string>
     <string name="step4">
-        4. If you want to add a particular image to favorite then you can add that image from the History where you can see the heart icon for adding that image to Favorites.
-    </string>
-    <string name="thank">
-        Thank You For using Our App!!!
+        4. If you want to add a particular image to favorite, then you can add that image from the History where you can see the heart icon for adding that image to Favorites.
     </string>
     <string name="todo">TODO</string>
 </resources>

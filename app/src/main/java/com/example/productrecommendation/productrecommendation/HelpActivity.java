@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.github.barteksc.pdfviewer.PDFView;
+
 public class HelpActivity extends AppCompatActivity {
 
     // Declaration of View objects
@@ -19,6 +21,7 @@ public class HelpActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nav_bar;
+    private PDFView guideView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,14 @@ public class HelpActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer);
         nav_bar = findViewById(R.id.nav);
 
+        guideView = findViewById(R.id.helpGuide);
+
         setupToolbar();
+        loadGuide();
+    }
+
+    public void loadGuide() {
+        guideView.fromAsset("manual.pdf").load();
     }
 
     public void setupToolbar() {
