@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/app_background.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_add_favorite.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_camera.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_delete.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_favorite.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_file_upload.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_help.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_history.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_home.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_remove_favorite.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/ic_search.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/layout_view_style.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/result_view_style.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/drawable/round_button.xml" value="0.2703125" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/menu/menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/menu/popup_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/ImageBasedProductRecommender/app/src/main/res/menu/toolbar_menu.xml" value="0.25416666666666665" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
@@ -29,7 +52,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
